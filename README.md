@@ -12,7 +12,6 @@ Requirements
 
 Dependencies for compilation
 ----------------------------
-
  * g++ >= 5.3
  * cmake >= 2.8
  * make >= 3.81
