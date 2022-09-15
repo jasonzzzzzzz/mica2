@@ -1,5 +1,6 @@
 #include <vector>
 #include <thread>
+#include <time.h>
 #include <cstdio>
 #include <cstdlib>
 #include <cassert>
@@ -32,6 +33,7 @@ static uint64_t hash(const T* key, size_t key_length) {
   return ::mica::util::hash(key, key_length);
 }
 
+
 enum class BenchmarkMode {
   kAdd = 0,
   kSet,
@@ -43,7 +45,6 @@ enum class BenchmarkMode {
   kSet1,
   kGet1,
 };
-
 struct Task {
   uint16_t lcore_id;
   uint16_t num_threads;
@@ -207,7 +208,8 @@ void benchmark(double zipf_theta) {
 
   uint16_t num_threads =
       static_cast<uint16_t>(config.get("processor").get("lcores").size());
-  size_t num_operations = 16 * 1048576;
+  //size_t num_operations = 16 * 1048576;
+  size_t num_operations = 4 * 1048576;
   size_t max_num_operations_per_thread = num_operations;
 
   size_t key_length = ::mica::util::roundup<8>(sizeof(uint64_t));
@@ -226,6 +228,7 @@ void benchmark(double zipf_theta) {
   assert(key_parts);
   char* values = reinterpret_cast<char*>(
       alloc.malloc_striped(value_length * num_items * 2));
+      //alloc.malloc_striped(value_length * num_items * 8));
   assert(values);
 
   uint64_t* op_count = new uint64_t[num_threads];
@@ -306,15 +309,15 @@ void benchmark(double zipf_theta) {
 
   BenchmarkMode benchmark_modes[] = {
       // clang-format off
-      BenchmarkMode::kAdd,
-      BenchmarkMode::kSet,
-      BenchmarkMode::kGetHit,
-      BenchmarkMode::kGetMiss,
-      BenchmarkMode::kGetSet95,
+  //    BenchmarkMode::kAdd,
+   //   BenchmarkMode::kSet,
+  //    BenchmarkMode::kGetHit,
+  //    BenchmarkMode::kGetMiss,
+  //    BenchmarkMode::kGetSet95,
       BenchmarkMode::kGetSet50,
-      BenchmarkMode::kDelete,
-      BenchmarkMode::kSet1,
-      BenchmarkMode::kGet1,
+  //    BenchmarkMode::kDelete,
+  //    BenchmarkMode::kSet1,
+  //    BenchmarkMode::kGet1,
       // clang-format on
   };
 
@@ -549,6 +552,7 @@ void benchmark(double zipf_theta) {
         break;
       case BenchmarkMode::kGetSet50:
         get_set_50_ops = (double)total_operation_count / diff;
+        mem_diff = alloc.get_memuse() - mem_start;
         break;
       case BenchmarkMode::kDelete:
         delete_ops = (double)total_operation_count / diff;
@@ -565,8 +569,14 @@ void benchmark(double zipf_theta) {
 
     printf("\n");
   }
-
+  time_t t;
+  time(&t);
+  printf("Data and Time: %s", ctime(&t)); 
   printf("memory:     %10.2lf MB\n", (double)mem_diff * 0.000001);
+  printf("get_set_50: %10.2lf Mops\n", get_set_50_ops * 0.000001);
+  printf("key length: %zu Bytes\n", key_length);
+  printf("value length: %zu Bytes\n", value_length);
+/*
   printf("add:        %10.2lf Mops\n", add_ops * 0.000001);
   printf("set:        %10.2lf Mops\n", set_ops * 0.000001);
   printf("get_hit:    %10.2lf Mops\n", get_hit_ops * 0.000001);
@@ -576,6 +586,8 @@ void benchmark(double zipf_theta) {
   printf("delete:     %10.2lf Mops\n", delete_ops * 0.000001);
   printf("set_1:      %10.2lf Mops\n", set_1_ops * 0.000001);
   printf("get_1:      %10.2lf Mops\n", get_1_ops * 0.000001);
+*/
+
 }
 
 int main(int argc, const char* argv[]) {

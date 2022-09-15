@@ -22,11 +22,14 @@
     "partition_count": 32,*/
     /*"lcores": [0, 2],
     "partition_count": 4,*/
-    "lcores": [0, 1],
+    "lcores": [1, 2],
     "partition_count": 2,
 
-    "total_size": 12884901888,      /* 12 GiB */
-    "total_item_count": 201326592,  /* 192 Mi */
+    /*"total_size": 12884901888,*/      /* 12 GiB */
+    /*"total_item_count": 201326592,*/  /* 192 Mi */
+
+    "total_size": 922746880,
+    "total_item_count": 31457280,    
 
     "concurrent_read": false,
     /*"concurrent_read": true,*/
@@ -45,7 +48,7 @@
     "lcores": [0, 1],
 
     "ports": [
-      {"port_id": 0, "ipv4_addr": "10.0.0.1"}
+      {"port_id": 0, "ipv4_addr": "10.1.1.29"}
       /*{"port_id": 1, "ipv4_addr": "10.0.0.2"},
       {"port_id": 2, "ipv4_addr": "10.0.0.3"},
       {"port_id": 3, "ipv4_addr": "10.0.0.4"},
@@ -56,8 +59,8 @@
     ],
 
     "endpoints": [
-      [0, 0],
-      [1, 0]
+      [1, 0],
+      [2, 0]
     ],
 
     /*
