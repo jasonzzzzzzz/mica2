@@ -1,3 +1,8 @@
+Stats
+======
+
+Stored in Google drive: Data_and_script/Motivation/
+
 MICA 2
 ======
 
